@@ -12,8 +12,8 @@ static uint64_t decode_od(od_t od){
     }else{
         // memory
         uint64_t vaddr = 0;
-        if(od.type == MM_IMM){
-            vaddr = od.imm;
+        if(od.type == IMM){
+            vaddr = *((uint64_t *)&od.imm); // en?
         }else if(od.type == MM_REG){
             vaddr = *(od.reg1);
         }else if(od.type == MM_IMM_REG){
@@ -45,12 +45,13 @@ void instruction_cycle(){
      handler(src, dst);
 }
 
-void init_handler_table(){
-    handler_table[add_reg_reg] = &add_reg_reg_handler;
+void move_reg_reg_handler(uint64_t src, uint64_t dst){
+    *(uint64_t *)dst = *(uint64_t *)src;
+    reg.rip = reg.rip + sizeof(inst_t);
 }
 
 
 void add_reg_reg_handler(uint64_t src, uint64_t dst){
-    *(uint64_t *)dst = *(uint64_t *) dst = *(uint64_t *)src;
+    *(uint64_t *)dst = *(uint64_t *)dst = *(uint64_t *)src;
     reg.rip = reg.rip + sizeof(inst_t);
 }
